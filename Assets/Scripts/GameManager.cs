@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
 
     private GameObject currentItem;
     public bool isGameOver;
+    private bool keepPlaying;
+    private Vector2 lastMousePos;
+    private Vector2 lastPos;
 
 
     [SerializeField] private int score;
@@ -24,6 +27,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject canvas;
 
     [SerializeField] private FileManager fileManager;
+
 
     void Awake()
     {
@@ -46,9 +50,35 @@ public class GameManager : MonoBehaviour
     {
         return FindObjectOfType<Camera>().ScreenToWorldPoint(Input.mousePosition);
     }
+    private Vector2 GetCurrentPos()
+    {
+        return new Vector2(Input.GetAxis("Horizontal"), 0f);
+    }
+
+    public Vector2 GetLastMousePos() => lastMousePos;
+    public Vector2 GetLastPos() => lastPos;
+
+    public Vector2 AddVector2s(Vector2 a, Vector2 b)
+    {
+        return new Vector2(a.x + b.x, a.y + b.y);
+    }
+
+    private bool HasMouseMoved()
+    {
+        return !(lastMousePos == GetCurrentMousePos());
+    }
+
+    private float BoundXPos(float x)
+    {
+        return x < 0 ? Math.Max(x, -3.5f) : Math.Min(x, 2.5f);
+    }
 
     void Start()
     {
+        Application.targetFrameRate = 60;
+
+        keepPlaying = true;
+
         score = 0;
         isGameOver = false;
 
@@ -57,8 +87,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (!ObjectPooling.instance.GetComponent<ObjectPooling>().isReady) return;
+        // wait until game is in focus
+        if (!keepPlaying)
+        {
+            return;
+        }
 
+        if (!ObjectPooling.instance.GetComponent<ObjectPooling>().isReady) return;
 
         // check if esc button pressed and if so then enable main menu
         if (Input.GetKeyUp(KeyCode.Escape))
@@ -72,15 +107,59 @@ public class GameManager : MonoBehaviour
         else if (currentItem && !canvas.GetComponent<UIManager>().isActive)
         {
             // if current item exists then track the current item to the mouse position
-            currentItem.transform.position = new Vector2(GetCurrentMousePos().x, 9);
-            currentItem.transform.Rotate(0.0f, 0.0f, Input.GetAxis("Horizontal") * -10.0f);
+            Vector2 currentMousePos = GetCurrentMousePos();
+            // if not moving then move based on keys instead
+            float xPos = 0;
+            if (HasMouseMoved())
+            {
+                xPos = GetCurrentMousePos().x;
+                lastMousePos = currentMousePos;
+            }
+            else
+            {
+                xPos = GetCurrentPos().x + currentItem.transform.position.x;
+            }
+            currentItem.transform.position = new Vector2(BoundXPos(xPos), 9);
 
-            // check if button clicked
-            if (Input.GetMouseButtonUp(0) && !isGameOver)
+            //float xPos = GetCurrentMousePos().x;
+
+            //currentItem.transform.position = new Vector2(xPos <= 0.0f ? Math.Max(xPos, -3.5f) : Math.Min(xPos, 2.5f), 9);
+            //currentItem.transform.position = AddVector2s(currentItem.transform.position, GetCurrentPos());
+            //currentItem.transform.Rotate(0.0f, 0.0f, Input.GetAxis("Horizontal") * -10.0f);
+
+            // // TODO: TEST CASE DELETE ON BUILD
+            // if (Input.GetKeyDown(KeyCode.Tab))
+            // {
+            //     UpdateScore(10);
+            // }
+
+
+
+            // // TODO: TEST CASE DELETE ON BUILD
+            // if (Input.GetKeyUp(KeyCode.Backspace) && !isGameOver)
+            // {
+            //     currentItem.transform.position = new Vector2(5, 9);
+            //     DropCurrentItem();
+            //     return;
+            // }
+            // check if mouse button clicked or spacebar clicked or enter clicked
+            if ((Input.GetMouseButtonUp(0) || Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Return)) && !isGameOver)
             {
                 DropCurrentItem();
                 StartCoroutine(WaitThenFunc(1.0f, SpawnNewItem));
             }
+        }
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (hasFocus)
+        {
+            StartCoroutine(WaitThenFunc(0.1f, () => keepPlaying = true));
+        }
+        else
+        {
+            keepPlaying = false;
         }
     }
 
@@ -95,13 +174,32 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        int newLvl = UnityEngine.Random.Range(0, 2);
-        currentItem = ObjectPooling.instance.GetComponent<ObjectPooling>().GetObject(newLvl, new Vector2(GetCurrentMousePos().x, 9));
+        float rand = UnityEngine.Random.Range(0.00f, 1.00f);
+        int newLvl;
+        if (rand < 0.475f) newLvl = 0; // 47.5% chance
+        else if (rand < 0.95f) newLvl = 1; // 47.5% chance
+        else newLvl = 2; // 5% chance
+
+        float xPos = 0.0f;
+        if (HasMouseMoved())
+        {
+            xPos = GetCurrentMousePos().x;
+            lastMousePos = GetCurrentMousePos();
+        }
+        else
+        {
+            xPos = lastPos.x;
+        }
+        Vector2 spawnPos = new Vector2(BoundXPos(xPos), 9);
+
+        currentItem = ObjectPooling.instance.GetComponent<ObjectPooling>().GetObject(newLvl, spawnPos);
+        // set the rotation to 0
+        currentItem.transform.localRotation = Quaternion.Euler(0, 0, 0);
         currentItem.GetComponent<ItemController>().lvl = newLvl;
         currentItem.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
 
-        // set face of current item
-        currentItem.GetComponent<ItemController>().SetFace(newLvl);
+        // // set face of current item
+        // currentItem.GetComponent<ItemController>().SetFace(newLvl);
 
     }
 
@@ -114,16 +212,22 @@ public class GameManager : MonoBehaviour
         ItemController objControl = newObj.GetComponent<ItemController>();
         objControl.lvl = lvl;
         // activate the sound, and effects on the new item, and update the face
-        objControl.Fusion();
+        objControl.FusionEffects();
         // add score
         UpdateScore(lvl * 10);
 
-        // update face
-        objControl.SetFace(lvl);
+        // // update face
+        // objControl.SetFace(lvl);
     }
 
     private void DropCurrentItem()
     {
+        if (!HasMouseMoved())
+        {
+            lastPos = currentItem.transform.position;
+        }
+
+
         // play item drop sound
         StartCoroutine(PlayQuickSound(currentItem.GetComponent<AudioSource>()));
 
@@ -136,14 +240,16 @@ public class GameManager : MonoBehaviour
 
     public void UpdateScore(int pointsAdded)
     {
-        // play sound effect for 1 second then pause it
-        StartCoroutine(PlayQuickSound(scoreUI.GetComponent<AudioSource>(), pointsAdded * 0.05f));
-
         score += pointsAdded;
         scoreUI.GetComponent<TextMeshProUGUI>().text = score.ToString();
 
         box.GetComponent<BoxController>().UpdateScoreTracker(pointsAdded);
         box.GetComponent<BoxController>().UpdateScoreMarkers(score);
+
+        // check if any achievements reached
+        AchievementManager.instance.CheckScoreAchievements(score);
+        AchievementManager.instance.CheckSmoothieAchievements(ObjectPooling.instance.GetObjsActive());
+        AchievementManager.instance.CheckAllAchievements();
     }
 
     public IEnumerator PlayQuickSound(AudioSource source)

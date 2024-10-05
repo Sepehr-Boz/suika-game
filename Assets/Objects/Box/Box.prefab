@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -180396953, guid: f32cdb175a7ab104aa70959aed36c4f3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -157,7 +157,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6, y: 1}
+  m_Size: {x: 5.25, y: 1}
   m_EdgeRadius: 0
 --- !u!82 &885804877277340283
 AudioSource:
@@ -648,12 +648,13 @@ EdgeCollider2D:
   m_Offset: {x: 0, y: 0}
   m_EdgeRadius: 0.4
   m_Points:
-  - {x: -3.8666692, y: 5.677946}
+  - {x: -3.8159294, y: 6.2294807}
+  - {x: -3.825075, y: 5.6616607}
   - {x: -3.1150959, y: 5.183332}
   - {x: -2.8244882, y: -0.55218077}
   - {x: 1.9161785, y: -0.5348828}
-  - {x: 2.2761834, y: 5.6994777}
-  m_AdjacentStartPoint: {x: 0, y: 0}
+  - {x: 2.2943676, y: 6.1885257}
+  m_AdjacentStartPoint: {x: 2.5, y: 6.5}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
@@ -716,7 +717,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.75, y: 0.75}
+  m_AnchoredPosition: {x: 0.71, y: 0.71}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1419229320252148518
@@ -1322,7 +1323,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.75, y: -0.75}
+  m_AnchoredPosition: {x: 0.71, y: -0.71}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &816804746611066118
@@ -1540,7 +1541,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.75, y: -0.75}
+  m_AnchoredPosition: {x: -0.71, y: -0.71}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1081348536989278300
@@ -1674,7 +1675,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.75, y: 0.75}
+  m_AnchoredPosition: {x: -0.71, y: 0.71}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6885097403485528414
@@ -1785,7 +1786,6 @@ GameObject:
   - component: {fileID: 5855528450680106983}
   - component: {fileID: 653589305215990956}
   - component: {fileID: 7580638368291245072}
-  - component: {fileID: 3637612745523297645}
   m_Layer: 0
   m_Name: Overflow
   m_TagString: Untagged
@@ -1905,16 +1905,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &3637612745523297645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8929814423923845188}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06027ef11bee1f6429e3e525af43afce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objInside: []

@@ -4,6 +4,7 @@ using TMPro;
 public class BoxController : MonoBehaviour
 {
     [SerializeField] private GameObject lid;
+
     [SerializeField] private GameObject knob;
     [SerializeField] private GameObject[] scoreCounters;
 
@@ -13,7 +14,7 @@ public class BoxController : MonoBehaviour
     public void UpdateScoreTracker(int pointsAdded)
     {
         // 1 point = 0.4 degree
-        float currentRotation = 0.4f * pointsAdded;
+        float currentRotation = 0.45f * pointsAdded;
         knob.transform.Rotate(0, 0, -currentRotation);
     }
 

@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ItemController : MonoBehaviour
@@ -8,11 +7,13 @@ public class ItemController : MonoBehaviour
     [SerializeField] private GameObject faceUI;
 
     public int lvl;
+    private bool isFusing;
 
     // update face when enabled
     void OnEnable()
     {
         SetFace(lvl);
+        isFusing = false;
     }
 
     void Update()
@@ -21,11 +22,14 @@ public class ItemController : MonoBehaviour
 
         if (thisVP.x < 0 || thisVP.x > 1 || thisVP.y < 0 || thisVP.y > 1)
         {
-            Vector3 mouseVP = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-            // check if mouse position also out of bounds, the game should not end if mouse is out of bounds
-            if (mouseVP.x < 0 || mouseVP.x > 1) return;
+            //Vector3 mouseVP = Camera.main.ScreenToViewportPoint(GameManager.instance.GetLastMousePos());
+            //Vector3 currentPosVP = Camera.main.ScreenToViewportPoint(GameManager.instance.GetLastPos());
+            //// check if mouse position also out of bounds, the game should not end if mouse is out of bounds
+            //if (mouseVP.x < 0 || mouseVP.x > 1) return;
+            //else if (currentPosVP.x < 0 || currentPosVP.x > 1) return;
 
-            //print(this + "is out of bounds");
+
+            //print("ITEMCONTROLLER" + this.transform.position.ToString() + gameObject.activeSelf.ToString() + lvl.ToString() + "is out of bounds");
             ObjectPooling.instance.GetComponent<ObjectPooling>().StoreObject(this.gameObject);
             GameManager.instance.GetComponent<GameManager>().EndGame();
         }
@@ -38,7 +42,7 @@ public class ItemController : MonoBehaviour
         faceUI.GetComponent<TextMeshProUGUI>().text = GameManager.instance.GetTextEmoji(index);
     }
 
-    public void Fusion()
+    public void FusionEffects()
     {
         // call fusion sound effect
         transform.Find("Fusion").gameObject.GetComponent<AudioSource>().Play();
@@ -69,26 +73,45 @@ public class ItemController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         GameObject otherObj = other.gameObject;
+        if (otherObj.tag != "Item") return;
 
-        if (otherObj.tag != "Item")
-        {
-            return;
-        }
+        if (isFusing) return;
 
         // check if other Item is of the same level
         if (lvl == otherObj.GetComponent<ItemController>().lvl)
         {
+            // check if the other object is already inactive, and if so then stop fusing
+            if (!otherObj.activeSelf) return;
             // disable the other
-            otherObj.SetActive(false);
+            ObjectPooling.instance.StoreObject(otherObj);
+            isFusing = true;
 
             if (this.gameObject.activeSelf)
             {
                 // call spawn new item in game manager
                 GameManager.instance.SpawnNewItem(lvl + 1, transform.position);
-
                 // deactivate itself
                 ObjectPooling.instance.StoreObject(this.gameObject);
             }
+        }
+    }
+
+    // check for collision with overflow
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.name != "Overflow") return;
+        else StartCoroutine(CheckAfterXSeconds(3.0f, other.gameObject));
+
+    }
+
+    // have the object check after x seconds, as it stops when the object is made inactive
+    private IEnumerator CheckAfterXSeconds(float seconds, GameObject overflow)
+    {
+        yield return new WaitForSeconds(seconds);
+        if (GetComponent<PolygonCollider2D>().IsTouching(overflow.GetComponent<Collider2D>()) && gameObject.activeSelf)
+        {
+            //print("ITEMCONTROLLER CHECKAFTERXSECONDS CALLED");
+            GameManager.instance.EndGame();
         }
     }
 }

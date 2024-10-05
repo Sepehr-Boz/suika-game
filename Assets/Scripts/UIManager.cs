@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -76,10 +77,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject scoreMenu;
     [SerializeField] private GameObject helpMenu;
+    [SerializeField] private GameObject achievementsMenu;
+
     [SerializeField] private GameObject boxButtonMainMenu;
     private int numHovers = 0;
 
     [SerializeField] private FileManager fileManager;
+    [SerializeField] private AchievementManager achievementManager;
 
     public void StartGame()
     {
@@ -92,6 +96,8 @@ public class UIManager : MonoBehaviour
         mainMenu.SetActive(false);
         // disable help menu
         helpMenu.SetActive(false);
+        // disable achievements menu
+        achievementsMenu.SetActive(false);
         // show score menu
         scoreMenu.SetActive(true);
 
@@ -111,7 +117,23 @@ public class UIManager : MonoBehaviour
         // set only help menu active
         helpMenu.SetActive(true);
         mainMenu.SetActive(false);
+        achievementsMenu.SetActive(false);
         scoreMenu.SetActive(false);
+    }
+
+    public void ShowAchievementsMenu()
+    {
+        helpMenu.SetActive(false);
+        mainMenu.SetActive(false);
+        scoreMenu.SetActive(false);
+        achievementsMenu.SetActive(true);
+
+        bool[] progress = achievementManager.GetCurrentAchievementStatus();
+        Transform achUIsParent = achievementsMenu.transform.Find("Scroll View").Find("Viewport").Find("Content");
+        for (int i = 0; i < progress.Length; i++)
+        {
+            achUIsParent.GetChild(i).Find("Panel").GetComponent<Image>().color = progress[i] ? Color.yellow : Color.black;
+        }
     }
 
     public void ExitGame()
@@ -127,6 +149,8 @@ public class UIManager : MonoBehaviour
         helpMenu.SetActive(false);
         // disable score menu
         scoreMenu.SetActive(false);
+        // disable achievements menu
+        achievementsMenu.SetActive(false);
     }
 
     public void MouseOverBox()

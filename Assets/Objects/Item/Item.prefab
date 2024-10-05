@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2599272302488103438}
   - component: {fileID: 3271465127112891506}
   - component: {fileID: 1769833219295047880}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Item
   m_TagString: Item
   m_Icon: {fileID: 0}
@@ -131,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faceUI: {fileID: 5697140214317350110}
   lvl: 0
+  isFusing: 0
 --- !u!60 &3271465127112891506
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -384,7 +385,7 @@ GameObject:
   - component: {fileID: 4146088143679838225}
   - component: {fileID: 7801945977658300551}
   - component: {fileID: 3692385836531732570}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Fusion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5309,7 +5310,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1373942543807867306}
   - component: {fileID: 4792501444265003460}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5370,7 +5371,7 @@ GameObject:
   - component: {fileID: 3159455509436615241}
   - component: {fileID: 1600256830325379983}
   - component: {fileID: 4501855138685162593}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Face
   m_TagString: Untagged
   m_Icon: {fileID: 0}

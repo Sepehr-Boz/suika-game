@@ -16,10 +16,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1733810531210034671, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
+      propertyPath: m_UseAutoMass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1733810531210034671, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
+      propertyPath: m_GravityScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1733810531210034671, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2485156676050657753, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -852368485, guid: 67885ba0bdcead743a087e92a2a376e1, type: 3}
+    - target: {fileID: 3159455509436615241, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 3271465127112891506, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 2.74
@@ -254,15 +270,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4545162084986024370, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.7
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4545162084986024370, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.7
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4545162084986024370, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.7
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4545162084986024370, guid: 0c64d2a2d9a71ee49b5bd10d76a332aa, type: 3}
       propertyPath: m_LocalPosition.x
